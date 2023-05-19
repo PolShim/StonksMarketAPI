@@ -6,5 +6,6 @@
         Task Delete(T entity);
         Task<T> GetById(int id);
         Task<T> Update(T entity);
+        Task<List<T>> GetAll();
     }
 }

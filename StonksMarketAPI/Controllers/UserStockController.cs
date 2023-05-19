@@ -4,6 +4,7 @@ using StonksMarket.Core.Repository;
 using StonksMarket.Core.StonksDbModels;
 using StonksMarket.Infrastructure.DTOs;
 using StonksMarket.Infrastructure.Request;
+using StonksMarket.Infrastructure.RequestDTO;
 
 namespace StonksMarket.API.Controllers
 {
@@ -45,20 +46,27 @@ namespace StonksMarket.API.Controllers
             }
 
             var userStocks = await _userStockRepository.GetUserStocksByUserName(request.UserName);
-            var existingStock = userStocks.Where(x => x.StockSymbol == request.UserStock.StockSymbol).FirstOrDefault();
-            if (existingStock is not null)
+            var userStock = userStocks.Where(x => x.StockSymbol == request.UserStock.StockSymbol).FirstOrDefault();
+            if (userStock is not null)
             {
-                existingStock.Quantity += request.UserStock.Quantity;
+                userStock.Quantity += request.UserStock.Quantity;
+                await _userStockRepository.Update(userStock);
             }
             else
             {
+                var stockToAdd = new UserStock()
+                {
+                    StockSymbol = request.UserStock.StockSymbol,
+                    Quantity = request.UserStock.Quantity,
+                    UserId = user.UserId
+                };
 
-                existingStock = await _userStockRepository.Add(_mapper.Map<UserStock>(request.UserStock));
-                var cashToSubstract = request.UserStock.Quantity * request.UserStock.Price;
-                user.AccountBalance = user.AccountBalance - (decimal)cashToSubstract;
-                await _userRepository.Update(user);
+                userStock = await _userStockRepository.Add(stockToAdd);
             }
 
+            var cashToSubstract = request.UserStock.Quantity * request.UserStock.Price;
+            user.AccountBalance = user.AccountBalance - (decimal)cashToSubstract;
+            await _userRepository.Update(user);
 
             Transaction transaction = new Transaction()
             {
@@ -70,7 +78,8 @@ namespace StonksMarket.API.Controllers
 
             await _transactionRepository.Add(transaction);
 
-            return _mapper.Map<UserStockDTO>(existingStock);
+
+            return _mapper.Map<UserStockDTO>(userStock);
         }
 
         [HttpPost("SellStockByUser")]
@@ -116,6 +125,12 @@ namespace StonksMarket.API.Controllers
 
 
             return _mapper.Map<UserStockDTO>(existingStock);
+        }
+
+        [HttpGet("GetUserTransactionsByUserName")]
+        public async Task<List<TransactionDTO>> GetUserTransactionsByUserName(string userName)
+        {
+            return _mapper.Map<List<TransactionDTO>>(await _transactionRepository.GetTransactionsByUser(userName));
         }
     }
 }

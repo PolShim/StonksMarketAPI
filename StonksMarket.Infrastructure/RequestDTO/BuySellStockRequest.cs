@@ -1,5 +1,5 @@
 ﻿using StonksMarket.Core.StonksDbModels;
-using StonksMarket.Infrastructure.DTOs;
+using StonksMarket.Infrastructure.RequestDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace StonksMarket.Infrastructure.Request
 {
     public class BuySellStockRequest
     {
-        public UserStockDTO UserStock { get; set; }
+        public UserStockBuySellDTO UserStock { get; set; }
         public string UserName { get; set; }
     }
 }

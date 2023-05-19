@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StonksMarket.Infrastructure.DTOs
+namespace StonksMarket.Infrastructure.RequestDTO
 {
-    public class UserStockDTO
+    public class UserStockBuySellDTO
     {
-        public int Id { get; set; }
-
         public string StockSymbol { get; set; } = null!;
 
         public long Quantity { get; set; }
+
+        public double Price { get; set; }
     }
 }

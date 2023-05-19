@@ -45,5 +45,10 @@ namespace StonksMarket.Infrastructure.Repository
 
             return result.Entity;
         }
+
+        public async Task<List<T>> GetAll()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
     }
 }
