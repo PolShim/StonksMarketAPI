@@ -25,9 +25,9 @@ namespace StonksMarket.API.Controllers
         }
 
         [HttpGet("GetUserStockByUserName")]
-        public async Task<List<UserStock>> GetUserStockByUserName(string userName)
+        public async Task<List<UserStockDTO>> GetUserStockByUserName(string userName)
         {
-            return await _userStockRepository.GetUserStocksByUserName(userName);
+            return _mapper.Map<List<UserStockDTO>>(await _userStockRepository.GetUserStocksByUserName(userName));
         }
         [HttpPost("BuyStockByUser")]
         public async Task<UserStockDTO> BuyStockByUser(BuySellStockRequest request)
