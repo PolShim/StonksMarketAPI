@@ -1,3 +1,7 @@
+using StonksMarket.Core.Repository;
+using StonksMarket.Core.StonksDbModels;
+using StonksMarket.Infrastructure;
+using StonksMarket.Infrastructure.Repository;
 using StonksMarket.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +12,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<StonksDbContext>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<IStockPricesDataService, StockPricesDataService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserStockRepository, UserStockRepository>();
 
 var app = builder.Build();
 

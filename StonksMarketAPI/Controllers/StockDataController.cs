@@ -9,10 +9,6 @@ namespace StonksMarketAPI.Controllers
     [Route("[controller]")]
     public class StockDataController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<StockDataController> _logger;
         private readonly IStockPricesDataService _stockPricesDataService;

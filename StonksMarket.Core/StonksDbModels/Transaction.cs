@@ -15,5 +15,7 @@ public partial class Transaction
 
     public decimal Value { get; set; }
 
+    public DateTime? CreatedAt { get; set; }
+
     public virtual User User { get; set; } = null!;
 }
