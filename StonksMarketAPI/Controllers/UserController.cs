@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using StonksMarket.Core.Repository;
+using StonksMarket.Core.StonksDbModels;
 using StonksMarket.Infrastructure.DTOs;
 
 namespace StonksMarket.API.Controllers
@@ -22,6 +23,30 @@ namespace StonksMarket.API.Controllers
         public async Task<List<UserDTO>> GetAllUsers()
         {
             return _mapper.Map<List<UserDTO>>(await _userRepository.GetAll());
+        }
+
+        [HttpPut("AddNewUser")]
+        public async Task<UserDTO> AddUser(string userName)
+        {
+            var newUser = new User()
+            {
+                AccountBalance = 100000,
+                Name = userName
+            };
+            return _mapper.Map<UserDTO>(await _userRepository.Add(newUser));
+        }
+
+        [HttpPut("ResetUser")]
+        public async Task<UserDTO> ResetUser(string userName)
+        {
+           var existingUser = await _userRepository.GetUserByName(userName);
+
+            if(existingUser is null) 
+            {
+                throw new Exception("User not found");
+            }
+
+            return _mapper.Map<UserDTO>(await _userRepository.Update(existingUser));
         }
     }
 }
