@@ -10,5 +10,6 @@ namespace StonksMarket.Core.Repository
     public interface IUserStockRepository : IRepositoryBase<UserStock>
     {
         Task<List<UserStock>> GetUserStocksByUserName(string userName);
+        Task DeleteUserStocksByUserName(string userName);
     }
 }

@@ -19,5 +19,16 @@ namespace StonksMarket.Infrastructure.Repository
         {
             return await _context.UserStocks.Where(x => x.User.Name == userName).ToListAsync();
         }
+
+        public async Task DeleteUserStocksByUserName(string userName)
+        {
+            var stocksToDelete = await this.GetUserStocksByUserName(userName);
+
+            _context.UserStocks.RemoveRange(stocksToDelete);
+
+            await _context.SaveChangesAsync();
+
+            return;
+        }
     }
 }

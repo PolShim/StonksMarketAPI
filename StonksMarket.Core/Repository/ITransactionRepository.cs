@@ -10,5 +10,6 @@ namespace StonksMarket.Core.Repository
     public interface ITransactionRepository : IRepositoryBase<Transaction>
     {
         Task<List<Transaction>> GetTransactionsByUser(string userName);
+        Task DeleteTransactionsByUser(string userName);
     }
 }

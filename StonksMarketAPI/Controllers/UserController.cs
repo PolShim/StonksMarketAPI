@@ -12,11 +12,15 @@ namespace StonksMarket.API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IUserStockRepository _userStockRepository;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper, ITransactionRepository transactionRepository, IUserStockRepository userStockRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _transactionRepository = transactionRepository;
+            _userStockRepository = userStockRepository;
         }
 
         [HttpGet("GetAllUsers")]
@@ -39,12 +43,15 @@ namespace StonksMarket.API.Controllers
         [HttpPut("ResetUser")]
         public async Task<UserDTO> ResetUser(string userName)
         {
-           var existingUser = await _userRepository.GetUserByName(userName);
+            var existingUser = await _userRepository.GetUserByName(userName);
 
-            if(existingUser is null) 
+            if (existingUser is null)
             {
                 throw new Exception("User not found");
             }
+            existingUser.AccountBalance = 100000;
+            await _transactionRepository.DeleteTransactionsByUser(userName);
+            await _userStockRepository.DeleteUserStocksByUserName(userName);
 
             return _mapper.Map<UserDTO>(await _userRepository.Update(existingUser));
         }
