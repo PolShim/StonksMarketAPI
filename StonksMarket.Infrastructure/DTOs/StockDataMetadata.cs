@@ -23,5 +23,7 @@ namespace StonksMarket.Infrastructure.DTOs
 
         [JsonProperty("5. Time Zone")]
         public string TimeZone { get; set; }
+
+        public string Name { get; set; }
     }
 }

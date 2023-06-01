@@ -11,5 +11,6 @@ namespace StonksMarket.Infrastructure.Request
         public string Function { get; set; }
         public string Symbol { get; set; }
         public string OutputSize { get; set; }
+        public string Name { get; set; }
     }
 }

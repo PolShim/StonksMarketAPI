@@ -39,7 +39,7 @@ namespace StonksMarket.Infrastructure.Services
 
             // Access the data returned by the API
             Console.WriteLine(data);
-
+            data.MetaData.Name = request.Name;
             return data;
         }
     }
